@@ -1,0 +1,39 @@
+# Configuration serveur — durcissement par défaut.
+#
+# Streamlit écoute par défaut sur TOUTES les interfaces réseau : sur un réseau
+# d'administration, n'importe quel poste atteignant l'adresse et le port ouvre
+# l'application, sans authentification, et accède au corpus — donc aux
+# documents LIMITE qui s'y trouvent.
+#
+# On restreint l'écoute à la machine locale. Ne modifiez « address » que si
+# vous mettez délibérément l'outil à disposition d'autres postes, et dans ce
+# cas mettez d'abord une authentification devant.
+
+# ATTENTION — déploiement hébergé : commentez « address » ci-dessous.
+# Sur un hébergeur (Streamlit Community Cloud, VM), la plateforme doit pouvoir
+# joindre le processus ; « localhost » l'en empêche et l'application reste
+# inaccessible. Sur un poste de travail, laissez cette ligne : elle est ce qui
+# empêche un autre poste du réseau d'ouvrir votre corpus.
+[server]
+address = "localhost"
+# « headless » reste absent ici, et c'est délibéré : à true, Streamlit
+# n'ouvre pas le navigateur — l'utilisateur double-clique, voit une fenêtre
+# noire, et conclut que l'installation a échoué. Le réglage n'a de sens que
+# pour un déploiement hébergé, où il est passé en ligne de commande
+# (voir DEPLOIEMENT_DEMO.md).
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 400
+
+[browser]
+gatherUsageStats = false
+
+# Couleurs de la charte de l'État : bleu France pour les éléments actifs,
+# fonds sobres. Les visualisations gardent leur propre palette, pensée pour
+# rester lisible en vision daltonienne — le bleu France n'y remplace rien.
+[theme]
+base = "light"
+primaryColor = "#000091"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f5f5fa"
+textColor = "#0b0b0b"

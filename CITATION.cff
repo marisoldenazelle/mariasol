@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "mariasol: an instrument for analysing European legislative negotiation"
+abstract: >-
+  Builds member state position maps, coalition structures and Council
+  arithmetic from the primary documents of a European legislative negotiation,
+  and reads amending acts ("omnibus") by parsing their modification
+  instructions deterministically. Computation is deterministic; a language
+  model is used only to qualify an already-established divergence, and every
+  model-produced claim is discarded unless its quotation is located verbatim in
+  the source corpus.
+message: "If you refer to this work, please cite it as below."
+type: software
+authors:
+  - family-names: "AUTHOR-FAMILY-NAME"
+    given-names: "AUTHOR-GIVEN-NAME"
+    affiliation: "Direction générale des entreprises"
+license: MIT
+version: 1.5.3
+date-released: "2026-09-09"
+repository-code: "https://github.com/OWNER/mariasol"
+keywords:
+  - European Union
+  - Council of the European Union
+  - legislative negotiation
+  - computational political science
+  - legal informatics
+  - retrieval-augmented generation
+  - citation verification

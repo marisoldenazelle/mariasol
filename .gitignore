@@ -1,0 +1,17 @@
+# Local data — never committed. The corpus is the user's, the database is theirs.
+data/*.sqlite3
+data/*.sqlite3-*
+data/corpus/*
+data/exports/*
+data/rules/*
+!data/reference/
+evaluation/disagreements.csv
+
+# Credentials
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

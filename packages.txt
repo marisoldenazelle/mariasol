@@ -1,0 +1,3 @@
+# Paquets système installés par Streamlit Community Cloud.
+# Nécessaire au rendu des figures matplotlib et à l'extraction PDF.
+libgl1

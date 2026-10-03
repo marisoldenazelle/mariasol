@@ -1,0 +1,58 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint
+        run: pyflakes core pages tests examples evaluation app.py accueil.py
+
+      - name: Tests
+        run: pytest -q
+        env:
+          # No model is called in the test suite: the guarantees under test are
+          # program-level, and a suite that needed a key could not run here.
+          REGWATCH_LLM_PROVIDER: offline
+
+      - name: Demo corpus builds and parses
+        run: |
+          python examples/make_demo_corpus.py
+          python - <<'PY'
+          from core import modificatif
+          from core.ingest import read_pages
+          from core.config import CORPUS_DIR
+          lecture = modificatif.lire(
+              read_pages(CORPUS_DIR / "demo_omnibus_com_2026_100.pdf"))
+          synthese = modificatif.synthese(lecture)
+          assert synthese.nb_textes == 3, synthese.nb_textes
+          assert "Article 18 bis" in lecture.bloc(
+              "règlement (UE) 2024/1000").articles_touches
+          print("demo corpus ok:", synthese.nb_textes, "acts,",
+                synthese.nb_instructions, "instructions")
+          PY
+        env:
+          REGWATCH_LLM_PROVIDER: offline
+          REGWATCH_DB: /tmp/ci.sqlite3

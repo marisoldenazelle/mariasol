@@ -1,0 +1,46 @@
+MARI(a)SOL
+Mapping d'Alignement Reglementaire par Intelligence Albert pour le Suivi
+des Orientations Legislatives
+Direction generale des entreprises
+
+===========================================================================
+
+TOUTE LA DOCUMENTATION EST DANS LE DOSSIER  documentation/  , EN PDF.
+
+Commencez par :   documentation/0. Lisez-moi d'abord.pdf
+Il indique lequel des neuf documents vous concerne, et combien de temps
+il demande.
+
+===========================================================================
+
+POUR LANCER L'APPLICATION TOUT DE SUITE
+
+  Windows  : double-cliquez sur  demarrer.bat
+  macOS    : dans le terminal,  chmod +x demarrer.sh  puis  ./demarrer.sh
+
+Le premier lancement installe les dependances : deux a trois minutes, une
+seule fois. L'application s'ouvre ensuite dans votre navigateur.
+
+Si quelque chose bloque, le detail figure dans
+documentation/2. Guide d'installation.pdf
+
+===========================================================================
+
+CE QU'IL FAUT SAVOIR AVANT DE DEPLOYER
+
+- Les calculs sont faits par le programme, pas par un modele de langage.
+- Aucune affirmation n'est produite sans citation verifiee litteralement
+  dans le document source.
+- Le seul appel reseau sortant est celui adresse a l'API Albert de la
+  DINUM, hebergee en SecNumCloud.
+- Ne placez jamais le dossier  data/  dans un espace synchronise
+  (OneDrive, SharePoint) : un fichier SQLite en cours d'ecriture s'y
+  corrompt. C'est la seule maniere connue de perdre des donnees.
+
+Les trois options de deploiement et ce que chacune suppose sont exposees
+dans documentation/6. Deploiement d'une instance partagee.pdf
+
+===========================================================================
+
+Ce fichier est en texte brut, sans accents, pour s'ouvrir correctement
+partout. Les documents PDF, eux, sont composes normalement.

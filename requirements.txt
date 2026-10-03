@@ -1,0 +1,26 @@
+# Versions figées, et non des bornes minimales.
+#
+# La raison tient en un incident : une borne « streamlit>=1.38 » laisse pip
+# résoudre vers n'importe quelle version, en dessous comme au-dessus de celle
+# sur laquelle l'application a été vérifiée. En dessous, les appels récents
+# (`width="stretch"`, `st.logo(size=…)`) n'existent pas et l'application plante
+# à la première page ; au-dessus, un comportement change sans prévenir — c'est
+# ce qui est arrivé à `st.logo`, qui a cessé d'accepter un chemin SVG.
+#
+# Ces versions sont celles avec lesquelles la 1.2.0 a été exécutée et testée
+# (77 tests). Pour les faire évoluer : mettre à jour dans un environnement
+# neuf, relancer `pytest`, exercer les dix pages, puis reporter ici la sortie
+# de `pip freeze` correspondante.
+streamlit==1.61.1
+pandas==3.0.2
+numpy==2.4.4
+matplotlib==3.10.9
+plotly==6.9.0
+networkx==3.6.1
+pdfplumber==0.11.9
+python-docx==1.2.0
+pydantic==2.13.3
+openai==2.53.0
+PyYAML==6.0.3
+openpyxl==3.1.5
+python-dotenv==1.2.2

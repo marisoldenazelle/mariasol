@@ -1,0 +1,16 @@
+# Outils de développement — inutiles pour se servir de l'application.
+#
+#   pip install -r requirements.txt -r requirements-dev.txt
+#   pytest -q          → 112 tests, environ dix secondes
+#   pyflakes core pages app.py accueil.py
+#   python tools/build_docs.py   → les PDF de documentation/
+#
+# Les tests protègent les règles de calcul, pas l'affichage : ils sont le
+# filet de qui reprend le code sans avoir parlé à celui qui l'a écrit.
+pytest>=8.0
+pyflakes>=3.0
+
+# Fabrication des PDF de documentation, uniquement au moment de préparer une
+# livraison. Les postes qui font tourner l'application n'en ont pas besoin.
+weasyprint>=62
+markdown>=3.5
