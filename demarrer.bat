@@ -29,7 +29,7 @@ if not exist app.py (
 
 python -c "import sys; sys.exit(0 if sys.version_info[:2] >= (3,10) else 1)" >nul 2>nul
 if errorlevel 1 (
-  echo Python 3.10 ou plus recent est introuvable sur ce poste.
+  echo Python 3.11 ou plus recent est introuvable sur ce poste.
   echo.
   echo Installez-le depuis https://www.python.org/downloads/
   echo IMPORTANT : cochez "Add Python to PATH" pendant l'installation.
