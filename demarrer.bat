@@ -27,7 +27,7 @@ if not exist app.py (
   exit /b 1
 )
 
-python -c "import sys; sys.exit(0 if sys.version_info[:2] >= (3,10) else 1)" >nul 2>nul
+python -c "import sys; sys.exit(0 if sys.version_info[:2] >= (3,11) else 1)" >nul 2>nul
 if errorlevel 1 (
   echo Python 3.11 ou plus recent est introuvable sur ce poste.
   echo.
