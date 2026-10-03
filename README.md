@@ -2,7 +2,7 @@
 
 **An instrument for analysing European legislative negotiation — designed under an institutional constraint.**
 
-[![tests](https://github.com/OWNER/mariasol/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/mariasol/actions/workflows/ci.yml)
+[![tests](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml/badge.svg)](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml)
 [![licence](https://img.shields.io/badge/licence-MIT-black)](LICENSE)
 [![python](https://img.shields.io/badge/python-3.10%2B-black)](requirements.txt)
 
@@ -167,5 +167,3 @@ document, no internal data and no API key. The interface language is French
 throughout, because that is who it was written for.
 
 Licensed under the MIT Licence — see [LICENSE](LICENSE).
-
-*Version française de cette présentation : [README.fr.md](README.fr.md).*
