@@ -4,7 +4,7 @@
 
 [![tests](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml/badge.svg)](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml)
 [![licence](https://img.shields.io/badge/licence-MIT-black)](LICENSE)
-[![python](https://img.shields.io/badge/python-3.10%2B-black)](requirements.txt)
+[![python](https://img.shields.io/badge/python-3.11%2B-black)](requirements.txt)
 
 Mapping where twenty-seven member states stand on a draft regulation, article by
 article, is done by hand: one analyst, one spreadsheet, several days per
