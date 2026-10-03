@@ -11,13 +11,13 @@ abstract: >-
 message: "If you refer to this work, please cite it as below."
 type: software
 authors:
-  - family-names: "AUTHOR-FAMILY-NAME"
-    given-names: "AUTHOR-GIVEN-NAME"
-    affiliation: "Direction générale des entreprises"
+  - family-names: "de Nazelle"
+    given-names: "Marisol"
+    affiliation: "Université Paris Sciences et Lettres (PSL)"
 license: MIT
 version: 1.5.3
 date-released: "2026-09-09"
-repository-code: "https://github.com/OWNER/mariasol"
+repository-code: "https://github.com/marisoldenazelle/mariasol"
 keywords:
   - European Union
   - Council of the European Union
