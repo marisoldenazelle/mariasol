@@ -18,7 +18,7 @@ Puis tapez :
 python --version
 ```
 
-Si une version s'affiche (3.10 ou plus récente), passez à l'étape 2.
+Si une version s'affiche (3.11 ou plus récente), passez à l'étape 2.
 Si la commande est introuvable, installez Python depuis
 <https://www.python.org/downloads/>. **Sur Windows, cochez impérativement
 « Add Python to PATH »** pendant l'installation — sans cela rien ne marchera.
