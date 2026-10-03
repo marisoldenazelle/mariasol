@@ -14,8 +14,8 @@ if [ ! -f app.py ]; then
   exit 1
 fi
 
-if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] >= (3, 10) else 1)' 2>/dev/null; then
-  echo "Python 3.10 ou plus récent est introuvable sur ce poste."
+if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] >= (3, 11) else 1)' 2>/dev/null; then
+  echo "Python 3.11 ou plus récent est introuvable sur ce poste."
   echo "Installez-le depuis https://www.python.org/downloads/ puis relancez ce script."
   exit 1
 fi
