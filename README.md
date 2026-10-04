@@ -74,6 +74,30 @@ it afterwards.
 
 ---
 
+## The documents
+
+The central task is one document: the **consolidated comments table** that a
+Council working party circulates. Delegations submit written comments and
+drafting suggestions, the presidency compiles them article by article, and the
+result runs to several hundred pages of prose, in English, with no structure a
+machine reads directly. Turning that document into a position matrix is what
+this tool is for; everything else exists around it.
+
+These tables come in two shapes depending on the stage of the file. Early on,
+two columns: *Commission proposal | drafting suggestions and comments*. Once a
+presidency compromise exists, three: *proposal | presidency text | comments*.
+The parser reads the first and the last column and never the middle one — on a
+three-column table the middle column holds the compromise text, and reading it
+as comments loses every contribution on the page.
+
+The corpus is not limited to those tables. The same pipeline ingests presidency
+compromise texts, non-papers and white papers from individual delegations,
+meeting reports, consolidated regulations fetched from EUR-Lex, and amending
+acts. Document type is detected on import and can be corrected by hand; it
+decides which treatment applies. A non-paper yields positions only where it
+expresses one — a passage of courtesy or procedure yields none. An amending act
+gets its own reader, because it does not contain the text it changes.
+
 ## What it does
 
 | | |
