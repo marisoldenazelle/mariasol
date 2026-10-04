@@ -14,3 +14,9 @@ pyflakes>=3.0
 # livraison. Les postes qui font tourner l'application n'en ont pas besoin.
 weasyprint>=62
 markdown>=3.5
+# Fabrication du corpus de démonstration (`examples/make_demo_corpus.py`), qui
+# écrit de vrais PDF pour que le lecteur d'actes modificatifs soit exercé par
+# le même chemin de code qu'une proposition réelle. L'application elle-même ne
+# lit que des PDF, elle n'en écrit jamais : d'où sa place ici et non dans
+# `requirements.txt`.
+reportlab>=4.0
