@@ -1,29 +1,195 @@
 # mariasol
 
-**An instrument for analysing European legislative negotiation — designed under an institutional constraint.**
+**A tool for European legislative negotiation. It reads the documents a Council
+working party actually circulates and maps where the twenty-seven member states
+stand on a draft regulation, article by article.**
 
 [![tests](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml/badge.svg)](https://github.com/marisoldenazelle/mariasol/actions/workflows/ci.yml)
 [![licence](https://img.shields.io/badge/licence-MIT-black)](LICENSE)
 [![python](https://img.shields.io/badge/python-3.11%2B-black)](requirements.txt)
 
-Mapping where twenty-seven member states stand on a draft regulation, article by
-article, is done by hand: one analyst, one spreadsheet, several days per
-consolidated comments table from a Council working party. By the time the map is
-finished the presidency has circulated a new compromise text.
+In the Council of the European Union, a Commission proposal is negotiated
+article by article in a working party of national delegations. Delegations send
+written comments; the presidency's secretariat merges them into one document — a
+consolidated comments table, circulated under a WK number — where each row is one
+delegation's remark on one provision. A file of ordinary size produces several
+hundred remarks, and five or six successive versions of them over a year.
 
-This tool builds that map from the primary documents, and makes every cell of it
+Reading that table is the analytical core of the job. Who is with us, who is
+against us, on which articles, and does the opposition weigh enough to block? It
+is done by hand, by one analyst, in a spreadsheet, over several days per version.
+By the time the map is finished the presidency has circulated a new compromise
+text and the map is out of date.
+
+mariasol builds that map from the primary documents, and makes every cell of it
 contestable on the evidence. It was written inside a French ministry directorate
 for its own negotiators, under constraints that are the interesting part of the
-problem: the documents may not leave the machine, the arithmetic must be
-reproducible by hand, and nothing a language model asserts may stand without a
-quotation that a program — not the model — has found in the source.
+problem: the documents may not leave controlled infrastructure, the arithmetic
+must be reproducible by hand, and nothing a language model asserts may stand
+without a quotation that a program — not the model — has found in the source.
 
-![The reading of an amending act: one row per amended regulation, one cell per
-affected article](docs/img/overview.png)
+<sub>The interface is in French throughout: it was built for French civil
+servants. Every screenshot below runs on the synthetic corpus shipped with this
+repository — a fictional regulation, a fictional omnibus and 237 fictional
+contributions from the 27 member states.</sub>
 
-<sub>The amending-act reader, running on the synthetic corpus shipped with this
-repository. The interface is in French: it was built for French civil
-servants.</sub>
+---
+
+## The documents, and what reading them means
+
+Everything the tool does follows from the shape of the material, so it is worth
+being concrete about the material.
+
+**The consolidated comments table.** A multi-page PDF table. The first column
+carries the Commission's text with the article headings; the last column carries
+the delegations' contributions, each introduced by a two-line country marker
+(`FR` then `(Comments):` or `(Drafting suggestions):`). Later in a negotiation
+the same document grows a third column for the presidency's compromise text,
+which sits *between* the two. The parser therefore reads the first and last
+columns and never the middle one — a three-column table parsed naively drops
+every contribution, which is the kind of defect that is invisible until someone
+counts. Extraction is pure pdfplumber and regular expressions, with no model
+involved: structure must be reproducible and auditable before anything is
+interpreted.
+
+**Everything else.** A negotiation is not only its WK tables. The tool ingests
+PDF and DOCX, detects what it is looking at, and segments accordingly:
+Commission proposals, presidency compromise texts, Official Journal texts fetched
+from EUR-Lex, internal working documents, and free-form material — non-papers,
+white papers, meeting reports — from which positions are extracted with the
+author inferred and nothing invented where a passage is mere courtesy or
+procedure. Positions drawn from a non-paper enter the same matrix as positions
+drawn from a WK table, so a delegation that has not written in the table but has
+circulated a paper is not silently absent from the map.
+
+**Amending acts are a different object.** An omnibus does not rewrite a
+regulation; it states what to change in it: *"in Article 5 of Regulation (EU)
+2023/2854, paragraph 2 is replaced by the following"*. Its own Article 1
+corresponds to nothing in the text being amended, so comparing two documents
+article by article produces nonsense. The tool parses the instructions instead,
+groups them by target act and target article, reconstructs each article before
+and after when the consolidated text is loaded, and compares two versions of the
+same omnibus instruction by instruction.
+
+**The silence rule.** On an article the French delegation did not amend, the
+reference position is maintenance of the text as it stands. Not amending is a
+position — it is agreement — and treating it as absence of data is the single
+most consequential modelling choice in the tool. It is stated on screen wherever
+it applies.
+
+---
+
+## What it produces
+
+### Coalitions, and how they form
+
+Pairwise agreement is computed between every pair of member states from their
+article-level positions. A graph is built on those agreements, an edge drawn
+above a threshold the analyst moves, and connected blocs are read off it with
+their population weight. The threshold is a control, not a hyperparameter: moving
+it is how you see which alliances are solid and which are artefacts of one
+article.
+
+![Bloc detection on the agreement graph at a 0.90 threshold: five blocs, each
+with its member-state count and share of EU population](docs/img/coalitions.png)
+
+Blocs are reported with their population share because in the Council that is
+what decides anything. The eight states in grey agree with no one above the
+threshold — which is itself a finding, and the sort of thing a spreadsheet does
+not tell you.
+
+### Contentious articles, and consensual ones
+
+Each article is placed by the mean position of the member states who expressed
+one and by the dispersion of those positions. The two axes separate two
+situations a single ranking confuses: an article everyone dislikes in the same
+way, and an article on which the room is split. The first is a lost cause or a
+trade; the second is where a negotiation is actually conducted.
+
+![Articles plotted by mean position and dispersion, with the ranked table
+beneath](docs/img/contentious.png)
+
+Low and to the left: broad, homogeneous opposition. High on the vertical axis:
+the member states divide, and those are the articles worth spending capital on.
+The table beneath ranks every article with the number of member states analysed
+and the number of outright oppositions, so a point based on nine contributions is
+not read like a point based on twenty-three.
+
+### The tracking table
+
+The same object the analyst keeps by hand: one row per article, the French
+reference position in the first column, one column per member state, coloured by
+compatibility with that reference.
+
+![The tracking table: one row per article, one column per member state, each cell
+carrying the summary of the contribution and the page it came from](docs/img/tracking.png)
+
+Each cell carries the summary of the contribution and, in brackets, the provision
+cited or the page it was found on. Where a state spoke more than twice on an
+article the cell says how many remarks remain and they are all in the detail tab
+and in the exported workbook. The colour follows the least favourable position
+expressed, never an average. This is exactly the "Détail par article" sheet of
+the exported Excel file, on screen and before exporting it.
+
+### The alignment matrix
+
+The same data as a heat map, with a choice of reference frame that changes what
+the question means.
+
+![The alignment matrix: 12 articles by the 26 other member states, read against
+the French reference position](docs/img/positions.png)
+
+*Against the national position* answers "who is with us". *Against the initial
+text* answers "who wants to change this, ourselves included" — a different and
+sometimes more useful map, because it shows the pressure on the text rather than
+the pressure on us. On an article the delegation did not amend the two coincide,
+by the silence rule. An empty cell means no contribution, and is not agreement.
+
+### Council arithmetic
+
+A group of member states, composed by hand or pre-filled from any article's
+positions, and what that group would give if it voted: qualified majority
+(55 % of member states — 15 of 27 — representing 65 % of the population) and
+blocking minority (at least 4 states representing more than 35 %).
+
+![Council arithmetic pre-filled from Article 11: qualified majority not reached,
+opposition insufficient to block, and the pivot states whose accession would
+change that](docs/img/arithmetic.png)
+
+This is counterfactual arithmetic, not prediction. Written positions in a working
+party are not votes and a working party does not vote; the tool says so on the
+screen that performs the calculation. What it is for is the question a negotiator
+actually asks — *is this enough, and if not, who is missing* — and the pivot
+table answers the second half: which states, by population weight, would turn an
+insufficient opposition into a blocking minority. Population figures live in a
+versioned CSV and are meant to be replaced by those of the Council's rules of
+procedure in force.
+
+### Amending acts
+
+Where an omnibus strikes: one row per amended act, one cell per affected article,
+the exponent giving the number of instructions bearing on it.
+
+![The amending-act map: three amended acts, nine affected articles, twelve
+instructions, with the operation counts beneath](docs/img/overview.png)
+
+The map is deterministic — it follows the operations written in the act, which
+can be read without help. Only the rating of a change's significance calls a
+model. Beneath it, what the act does by operation and what each amended text
+takes, then every instruction with its page and its quoted new text, then a Word
+synthesis note and an Excel workbook.
+
+### And also
+
+| | |
+|---|---|
+| **Sourced search** | A question in French, an answer in which every assertion cites a passage located verbatim in the corpus. |
+| **Amendment tracking** | "Were our amendments taken up?" — a verdict per amendment in a destination text, with an explicit refusal to conclude where the evidence is missing. |
+| **Weighting** | A criterion written in plain language by the analyst, used to re-rank member states by what matters in the file at hand. |
+| **Deliverables** | Word note and Excel workbook, both editable, in the format the directorate already uses. Not screenshots — real tables, and charts bound to cells. |
+
+More on each, and on why each is built the way it is, in
+**[docs/METHOD.md](docs/METHOD.md)**.
 
 ---
 
@@ -74,48 +240,6 @@ it afterwards.
 
 ---
 
-## The documents
-
-The central task is one document: the **consolidated comments table** that a
-Council working party circulates. Delegations submit written comments and
-drafting suggestions, the presidency compiles them article by article, and the
-result runs to several hundred pages of prose, in English, with no structure a
-machine reads directly. Turning that document into a position matrix is what
-this tool is for; everything else exists around it.
-
-These tables come in two shapes depending on the stage of the file. Early on,
-two columns: *Commission proposal | drafting suggestions and comments*. Once a
-presidency compromise exists, three: *proposal | presidency text | comments*.
-The parser reads the first and the last column and never the middle one — on a
-three-column table the middle column holds the compromise text, and reading it
-as comments loses every contribution on the page.
-
-The corpus is not limited to those tables. The same pipeline ingests presidency
-compromise texts, non-papers and white papers from individual delegations,
-meeting reports, consolidated regulations fetched from EUR-Lex, and amending
-acts. Document type is detected on import and can be corrected by hand; it
-decides which treatment applies. A non-paper yields positions only where it
-expresses one — a passage of courtesy or procedure yields none. An amending act
-gets its own reader, because it does not contain the text it changes.
-
-## What it does
-
-| | |
-|---|---|
-| **Position mapping** | Classifies each written contribution — aligned, partially aligned, divergent — against a reference position, and builds the article × member state matrix. |
-| **Two reference frames** | *Against the national position* answers "who is with us"; *against the initial text* answers "who wants to change it, ourselves included". On an article the delegation did not amend the two coincide, because not amending counts as acceptance. |
-| **Coalition arithmetic** | Pairwise agreement, bloc detection on a graph, and Council arithmetic: qualified majority (15 of 27 states and 65 % of population) and blocking minority (at least 4 states and more than 35 %). |
-| **Amending acts** | An omnibus does not rewrite a regulation, it states what to change in it. The reader parses those instructions, groups them by target act and target article, reconstructs each article before and after, and compares two versions of the same omnibus instruction by instruction. |
-| **Sourced search** | A question in French, an answer in which every assertion cites a passage located verbatim in the corpus. |
-| **Deliverables** | Word note and Excel workbook, both editable, in the format the directorate already uses. Not screenshots — real tables. |
-
-More on each, and on why each is built the way it is, in
-**[docs/METHOD.md](docs/METHOD.md)**.
-
-![The alignment matrix and the choice of reference frame](docs/img/positions.png)
-
----
-
 ## Run it
 
 No credentials, no restricted document, no network:
@@ -132,9 +256,11 @@ documents.
 
 The demo corpus is entirely synthetic — no real text, no real delegation, no real
 position — but it is parsed by exactly the same code path as a real Commission
-proposal, including the drafting conventions the amending-act reader targets.
-Position classification runs in its offline lexical mode, so the matrix and the
-coalition arithmetic fill up without any model.
+proposal, including the drafting conventions the amending-act reader targets. It
+generates 237 contributions from the 27 member states across 12 articles, with
+three camps built in so that blocs and contentious articles are there to be
+found. Position classification runs in its offline lexical mode, so every
+screenshot above reproduces without a model.
 
 To use a model, copy `.env.example` to `.env` and set a key. See
 [docs/fr/DEMARRAGE.md](docs/fr/DEMARRAGE.md) for the step-by-step install guide
@@ -195,5 +321,3 @@ document, no internal data and no API key. The interface language is French
 throughout, because that is who it was written for.
 
 Licensed under the MIT Licence — see [LICENSE](LICENSE).
-
-*Version française de cette présentation : [README.fr.md](README.fr.md).*

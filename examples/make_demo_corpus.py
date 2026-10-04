@@ -81,12 +81,22 @@ ARTICLES = {
         "d) de manière sécurisée et traçable.\n"
         "2. Le détenteur de données ne peut subordonner la mise à "
         "disposition à l'acceptation de conditions contractuelles abusives.\n"),
+    "Article 7": (
+        "Conditions contractuelles\n"
+        "1. Une clause contractuelle est abusive lorsqu'elle s'écarte "
+        "gravement des bonnes pratiques en matière d'accès aux données.\n"
+        "2. Le présent article s'applique aux relations entre entreprises.\n"),
     "Article 9": (
         "Obligations des fabricants\n"
         "1. Le fabricant conçoit le capteur connecté de manière que les "
         "données produites soient accessibles par défaut à l'utilisateur.\n"
         "2. Le fabricant informe l'utilisateur, avant la conclusion du "
         "contrat, de la nature et du volume des données produites.\n"),
+    "Article 11": (
+        "Protection des secrets d'affaires\n"
+        "1. Le détenteur de données peut refuser la mise à disposition "
+        "lorsqu'elle compromettrait un secret d'affaires protégé.\n"
+        "2. Le refus est motivé et notifié par écrit au destinataire.\n"),
     "Article 14": (
         "Notification des incidents\n"
         "1. Le détenteur de données notifie à l'autorité compétente tout "
@@ -95,12 +105,21 @@ ARTICLES = {
         "en avoir pris connaissance.\n"
         "2. La notification précise la nature de l'incident, les catégories "
         "de données concernées et les mesures prises.\n"),
+    "Article 16": (
+        "Transferts vers les pays tiers\n"
+        "1. Le détenteur de données prend des mesures raisonnables pour "
+        "empêcher l'accès par les autorités d'un pays tiers lorsque cet "
+        "accès serait contraire au droit de l'Union.\n"),
     "Article 18": (
         "Autorités compétentes\n"
         "1. Chaque État membre désigne une ou plusieurs autorités "
         "compétentes chargées de l'application du présent règlement.\n"
         "2. Les autorités compétentes coopèrent entre elles et avec la "
         "Commission.\n"),
+    "Article 20": (
+        "Interopérabilité\n"
+        "1. Les exploitants d'espaces de données respectent les exigences "
+        "essentielles d'interopérabilité fixées à l'annexe I.\n"),
     "Article 22": (
         "Sanctions\n"
         "1. Les États membres déterminent le régime des sanctions "
@@ -207,129 +226,134 @@ publication au Journal officiel de l'Union européenne.
 # that coalitions emerge rather than being drawn by hand.
 
 ETATS = {
-    "FR": "France", "DE": "Allemagne", "NL": "Pays-Bas", "IT": "Italie",
-    "ES": "Espagne", "PL": "Pologne", "SE": "Suède", "DK": "Danemark",
-    "IE": "Irlande", "AT": "Autriche", "BE": "Belgique", "FI": "Finlande",
+    "AT": "Autriche", "BE": "Belgique", "BG": "Bulgarie", "CY": "Chypre",
+    "CZ": "Tchéquie", "DE": "Allemagne", "DK": "Danemark", "EE": "Estonie",
+    "EL": "Grèce", "ES": "Espagne", "FI": "Finlande", "FR": "France",
+    "HR": "Croatie", "HU": "Hongrie", "IE": "Irlande", "IT": "Italie",
+    "LT": "Lituanie", "LU": "Luxembourg", "LV": "Lettonie", "MT": "Malte",
+    "NL": "Pays-Bas", "PL": "Pologne", "PT": "Portugal", "RO": "Roumanie",
+    "SE": "Suède", "SI": "Slovénie", "SK": "Slovaquie",
 }
 
-# (article, code État, nature, texte)
-POSITIONS = [
-    ("Article 5", "FR", "drafting",
-     "FR considers that point (c) should be maintained. Aggregation is a "
-     "safeguard for commercially sensitive data and its deletion is not "
-     "acceptable as drafted."),
-    ("Article 5", "DE", "comments",
-     "DE supports the deletion of point (c) and welcomes the machine-readable "
-     "format requirement."),
-    ("Article 5", "NL", "comments",
-     "NL supports the Commission proposal on this article."),
-    ("Article 5", "IT", "drafting",
-     "IT cannot support the deletion of point (c) and would prefer to keep "
-     "the current wording."),
-    ("Article 5", "ES", "comments",
-     "ES can accept the proposal, subject to clarification of the term "
-     "'machine-readable'."),
-    ("Article 5", "PL", "comments",
-     "PL does not support this amendment. The obligation to publish general "
-     "conditions creates a disproportionate burden for SMEs."),
-    ("Article 5", "SE", "comments",
-     "SE welcomes the simplification and supports the text as drafted."),
-    ("Article 5", "DK", "comments",
-     "DK supports the proposal."),
-    ("Article 5", "IE", "comments",
-     "IE enters a scrutiny reservation on this article."),
-    ("Article 5", "AT", "comments",
-     "AT shares the concerns expressed by other delegations on the deletion "
-     "of point (c) and cannot support it."),
+# Three loose camps, so that blocs emerge from the positions rather than being
+# drawn by hand. The grouping is invented for this fixture and carries no claim
+# whatsoever about how these delegations behave in reality; it exists so that
+# the coalition graph and the contentious-article scatter have something to
+# show.
+CAMPS = {
+    "ouverture": ["NL", "SE", "DK", "IE", "FI", "EE", "LV", "LT", "CZ",
+                  "LU", "MT"],
+    "protection": ["FR", "DE", "IT", "ES", "AT", "BE", "PT", "SI", "EL", "CY"],
+    "charge": ["PL", "HU", "RO", "BG", "SK", "HR"],
+}
+CAMP_DE = {code: camp for camp, codes in CAMPS.items() for code in codes}
 
-    ("Article 14", "FR", "drafting",
-     "FR proposes to retain the 72-hour deadline. Extending it to 96 hours "
-     "weakens the supervision regime without demonstrated benefit."),
-    ("Article 14", "DE", "comments",
-     "DE supports the extension to 96 hours."),
-    ("Article 14", "NL", "comments",
-     "NL supports the extension, which aligns the deadline with other "
-     "reporting obligations."),
-    ("Article 14", "IT", "comments",
-     "IT can accept the proposal."),
-    ("Article 14", "ES", "drafting",
-     "ES would prefer to keep 72 hours and does not support the extension."),
-    ("Article 14", "PL", "comments",
-     "PL supports the extension to 96 hours."),
-    ("Article 14", "SE", "comments",
-     "SE does not support the extension. The current deadline should be "
-     "maintained."),
-    ("Article 14", "DK", "comments",
-     "DK enters a scrutiny reservation."),
-    ("Article 14", "FI", "comments",
-     "FI supports the Commission proposal."),
-    ("Article 14", "BE", "comments",
-     "BE can support the extension provided the content of the notification "
-     "is unchanged."),
+# Per article: the subject in one phrase, and each camp's leaning. Some
+# articles are consensual, some split the room — that contrast is the point of
+# the contentious-article view.
+ARTICLES_WK = {
+    "Article premier": ("the scope of the Regulation",
+                        {"ouverture": "support", "protection": "partial",
+                         "charge": "support"}),
+    "Article 2": ("the definitions, in particular 'data holder'",
+                  {"ouverture": "support", "protection": "partial",
+                   "charge": "partial"}),
+    "Article 5": ("the conditions for making data available",
+                  {"ouverture": "support", "protection": "oppose",
+                   "charge": "oppose"}),
+    "Article 7": ("the unfairness test for contractual terms",
+                  {"ouverture": "partial", "protection": "support",
+                   "charge": "oppose"}),
+    "Article 9": ("the obligations placed on manufacturers",
+                  {"ouverture": "support", "protection": "support",
+                   "charge": "partial"}),
+    "Article 11": ("the trade secrets exception",
+                   {"ouverture": "oppose", "protection": "support",
+                    "charge": "oppose"}),
+    "Article 14": ("the incident notification deadline",
+                   {"ouverture": "support", "protection": "oppose",
+                    "charge": "support"}),
+    "Article 16": ("safeguards against third-country access",
+                   {"ouverture": "partial", "protection": "partial",
+                    "charge": "partial"}),
+    "Article 18": ("the creation of a European data board",
+                   {"ouverture": "oppose", "protection": "support",
+                    "charge": "partial"}),
+    "Article 20": ("the interoperability requirements",
+                   {"ouverture": "support", "protection": "support",
+                    "charge": "support"}),
+    "Article 22": ("the penalties regime",
+                   {"ouverture": "support", "protection": "oppose",
+                    "charge": "partial"}),
+    "Article 25": ("entry into force and transitional periods",
+                   {"ouverture": "support", "protection": "support",
+                    "charge": "support"}),
+}
 
-    ("Article 18", "FR", "comments",
-     "FR welcomes the creation of the European data board and considers it "
-     "essential to the consistent application of the Regulation."),
-    ("Article 18", "DE", "comments",
-     "DE supports the creation of the board."),
-    ("Article 18", "NL", "comments",
-     "NL questions the added value of a new body and would prefer to rely on "
-     "existing cooperation structures. NL cannot support this article."),
-    ("Article 18", "SE", "comments",
-     "SE does not support the creation of an additional body."),
-    ("Article 18", "DK", "comments",
-     "DK shares the concerns of NL and SE on the proliferation of bodies."),
-    ("Article 18", "IT", "comments",
-     "IT supports the proposal."),
-    ("Article 18", "ES", "comments",
-     "ES supports the creation of the board."),
-    ("Article 18", "PL", "comments",
-     "PL enters a scrutiny reservation on the composition of the board."),
+# Wording drawn from the register of working party comments. The lexical
+# classifier keys on these formulas, which is why the offline mode fills the
+# matrix without any model.
+FORMULES = {
+    "support": [
+        "{ms} supports the Commission proposal on {sujet}.",
+        "{ms} welcomes the approach taken on {sujet} and can support the text "
+        "as drafted.",
+        "{ms} can support {sujet} as proposed.",
+        "{ms} fully supports the text on {sujet}.",
+    ],
+    "oppose": [
+        "{ms} does not support the proposal on {sujet}. The provision creates "
+        "a disproportionate burden and should be deleted.",
+        "{ms} cannot support {sujet} as drafted.",
+        "{ms} opposes the approach retained on {sujet} and sees no added "
+        "value in it.",
+        "{ms} is not in a position to accept {sujet} in its current form.",
+    ],
+    "partial": [
+        "{ms} can support {sujet} subject to clarification of the scope.",
+        "{ms} supports the objective but would prefer a more precise wording "
+        "on {sujet}.",
+        "{ms} welcomes the provision; however, {ms} suggests aligning {sujet} "
+        "with the wording used in related instruments.",
+        "{ms} enters a scrutiny reservation on {sujet}.",
+    ],
+}
 
-    ("Article 22", "FR", "drafting",
-     "FR firmly opposes the deletion of Article 22. A regulation without a "
-     "penalties regime cannot be enforced and this deletion should be "
-     "withdrawn."),
-    ("Article 22", "DE", "comments",
-     "DE does not support the deletion of the penalties article."),
-    ("Article 22", "IT", "comments",
-     "IT opposes the deletion."),
-    ("Article 22", "ES", "comments",
-     "ES cannot accept the deletion of Article 22."),
-    ("Article 22", "NL", "comments",
-     "NL can accept the deletion, as penalties are governed by national law."),
-    ("Article 22", "PL", "comments",
-     "PL supports the deletion."),
-    ("Article 22", "SE", "comments",
-     "SE supports the simplification."),
-    ("Article 22", "DK", "comments",
-     "DK supports the deletion."),
-    ("Article 22", "AT", "comments",
-     "AT opposes the deletion of the penalties regime."),
-    ("Article 22", "BE", "comments",
-     "BE shares the concerns expressed by FR and DE and cannot support the "
-     "deletion."),
+# Deterministic pseudo-randomness: the fixture must be identical on every
+# machine, so no `random` module and no seed to forget.
+def _tirage(code: str, article: str, modulo: int) -> int:
+    graine = sum(ord(c) * (i + 7) for i, c in enumerate(code + article))
+    return (graine * 2654435761) % modulo
 
-    ("Article 9", "FR", "comments",
-     "FR has no comment on this article."),
-    ("Article 9", "DE", "comments",
-     "DE supports the article as drafted."),
-    ("Article 9", "FI", "comments",
-     "FI supports the article."),
-    ("Article 9", "IE", "comments",
-     "IE can accept the article."),
 
-    ("Article 2", "DE", "drafting",
-     "DE proposes to clarify the definition of 'data holder' to exclude "
-     "intermediaries acting on behalf of the user."),
-    ("Article 2", "FR", "drafting",
-     "FR proposes to align the definition of 'connected sensor' with the "
-     "wording used in related instruments."),
-    ("Article 2", "NL", "comments",
-     "NL supports the definitions as drafted."),
-    ("Article 2", "PL", "comments",
-     "PL enters a scrutiny reservation on the definitions."),
-]
+def _positions() -> list[tuple[str, str, str, str]]:
+    """(article, member state, kind, text) for the whole fictional table.
+
+    Not every delegation speaks on every article — a real consolidated table is
+    sparse, and a dense one would make agreement rates meaningless. Roughly a
+    quarter of the cells are left empty, and about one delegation in seven
+    departs from its camp, so that blocs are tendencies rather than blocks.
+    """
+    lignes = []
+    for article, (sujet, tendances) in ARTICLES_WK.items():
+        for code in sorted(ETATS):
+            if _tirage(code, article, 100) < 26:        # silence
+                continue
+            penchant = tendances[CAMP_DE[code]]
+            if _tirage(code, article + "dev", 100) < 14:   # dissidence
+                autres = [p for p in ("support", "oppose", "partial")
+                          if p != penchant]
+                penchant = autres[_tirage(code, article + "alt", 2)]
+            gabarits = FORMULES[penchant]
+            texte = gabarits[_tirage(code, article + "f", len(gabarits))].format(
+                ms=code, sujet=sujet)
+            nature = "drafting" if penchant == "partial" and \
+                _tirage(code, article + "k", 2) else "comments"
+            lignes.append((article, code, nature, texte))
+    return lignes
+
+
+POSITIONS = _positions()
 
 
 # ---------------------------------------------------------------------------
@@ -402,9 +426,8 @@ def construire(reset: bool = False) -> None:
     # --- the comments table -------------------------------------------------
     # Written straight to the store rather than through a PDF: the layout of a
     # real WK table is not public, and inventing one would demonstrate nothing.
-    sections = {t: (f"art_{i}", i) for i, t in enumerate(
-        ["Article 2", "Article 5", "Article 9", "Article 14",
-         "Article 18", "Article 22"], start=1)}
+    sections = {t: (f"art_{i}", i)
+                for i, t in enumerate(ARTICLES_WK, start=1)}
     contributions = []
     for label, code, nature, texte in POSITIONS:
         sid, rang = sections[label]
