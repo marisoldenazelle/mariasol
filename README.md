@@ -97,10 +97,14 @@ More on each, and on why each is built the way it is, in
 No credentials, no restricted document, no network:
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-dev.txt
 python examples/make_demo_corpus.py      # a fictional regulation, omnibus and comments table
 streamlit run app.py
 ```
+
+The development requirements are included because the demo corpus writer needs
+them; `requirements.txt` alone is enough to run the application on real
+documents.
 
 The demo corpus is entirely synthetic — no real text, no real delegation, no real
 position — but it is parsed by exactly the same code path as a real Commission
@@ -167,3 +171,5 @@ document, no internal data and no API key. The interface language is French
 throughout, because that is who it was written for.
 
 Licensed under the MIT Licence — see [LICENSE](LICENSE).
+
+*Version française de cette présentation : [README.fr.md](README.fr.md).*
